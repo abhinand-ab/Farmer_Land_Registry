@@ -18,6 +18,8 @@ export default function App() {
   const [nearbyFarmers, setNearbyFarmers] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
+  const API = "https://farmer-land-registry.onrender.com";
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -27,7 +29,7 @@ export default function App() {
 
   const fetchFarmers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/farmers");
+      const res = await axios.get(`${API}/farmers`);
       setFarmers(res.data);
     } catch (error) {
       console.log(error);
@@ -65,12 +67,12 @@ export default function App() {
 
         if (editingId) {
           await axios.put(
-            `http://localhost:5000/farmers/${editingId}`,
+            `${API}/farmers/${editingId}`,
             payload
           );
         } else {
           await axios.post(
-            "http://localhost:5000/farmers",
+            `${API}/farmers`,
             payload
           );
         }
@@ -116,7 +118,7 @@ export default function App() {
 
     try {
       await axios.delete(
-        `http://localhost:5000/farmers/${id}`
+        `${API}/farmers/${id}`
       );
 
       fetchFarmers();
@@ -133,7 +135,7 @@ export default function App() {
 
         try {
           const res = await axios.get(
-            `http://localhost:5000/farmers/nearby?lat=${lat}&lng=${lng}&km=${radius}`
+            `${API}/farmers/nearby?lat=${lat}&lng=${lng}&km=${radius}`
           );
 
           console.log(res.data);
