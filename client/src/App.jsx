@@ -65,16 +65,33 @@ export default function App() {
           },
         };
 
-        if (editingId) {
-          await axios.put(
-            `${API}/farmers/${editingId}`,
-            payload
+        try {
+          console.log("Payload:", payload);
+
+          if (editingId) {
+            const res = await axios.put(
+              `${API}/farmers/${editingId}`,
+              payload
+            );
+
+            console.log("Update Success:", res.data);
+          } else {
+            const res = await axios.post(
+              `${API}/farmers`,
+              payload
+            );
+
+            console.log("Register Success:", res.data);
+          }
+        } catch (error) {
+          console.log("API Error:");
+          console.log(error.response?.data);
+          console.log(error);
+          alert(
+            error.response?.data?.message ||
+            "Failed to save farmer"
           );
-        } else {
-          await axios.post(
-            `${API}/farmers`,
-            payload
-          );
+          return;
         }
 
         setFormData({
@@ -475,11 +492,11 @@ export default function App() {
                       {farmer.phone}
                     </td>
 
-                   <td className="p-4">
-                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 font-medium">
+                    <td className="p-4">
+                      <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 font-medium">
                         {farmer.cropType}
-                    </span>
-                   </td>
+                      </span>
+                    </td>
 
                     <td className="p-4">
                       {farmer.plotSize}
